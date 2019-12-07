@@ -14,6 +14,10 @@ const studentSchema = new Schema({
         type: String,
         required: true
     },
+    studentProgram: {
+        type: Schema.Types.ObjectId,
+        ref: 'Program'
+    },
     studentSemesters: [
         {
             SemesterName: { type: String },
@@ -21,13 +25,9 @@ const studentSchema = new Schema({
             subject: {
                 clasroomId: {
                     type: Schema.Types.ObjectId,
-                    ref: 'Classroom',
-                    required: true
+                    ref: 'Classroom'
                 },
-                credit: {
-                    type: Number,
-                    required: true
-                }
+                credit: { type: Number }
             }
 
         }
