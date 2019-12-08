@@ -7,6 +7,8 @@ const authRoute = require('./routes/authRoute');
 const studentRoute = require('./routes/studentRoute');
 const adminRoute = require('./routes/adminRoute');
 
+const initiateController = require('./controllers/initiateController');
+
 const app = express();
 
 // Mongodb URI, adjust the database to be used
@@ -48,7 +50,7 @@ mongoose
     )
     .then(result => {
         console.log('Connected');
-        app.listen(8080);
+        app.listen(8080, initiateController.initiateApp);
     })
     .catch(err => {
         console.log(err);

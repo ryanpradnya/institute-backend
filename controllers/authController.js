@@ -53,7 +53,7 @@ exports.adminSignin = async (req, res, next) => {
 
         const admin = await Admin.findOne({ adminEmail: email });
         if (!admin) {
-            const error = new Error('Email not found');
+            const error = new Error('Account not found');
             error.statusCode = 401;
             throw error;
         }
@@ -96,7 +96,7 @@ exports.studentSignin = async (req, res, next) => {
 
         const student = await Student.findOne({ studentEmail: email });
         if (!student) {
-            const error = new Error('Email not found');
+            const error = new Error('Account not found');
             error.statusCode = 401;
             throw error;
         }

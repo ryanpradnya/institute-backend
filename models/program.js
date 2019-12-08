@@ -10,6 +10,12 @@ const programSchema = new Schema({
         type: Number,
         required: true
     },
+    students: [
+        {
+            year: { type: String },
+            maxStudents: { type: Number }
+        }
+    ],
     classrooms: [
         {
             type: Schema.Types.ObjectId,
