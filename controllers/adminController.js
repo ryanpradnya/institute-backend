@@ -31,7 +31,67 @@ exports.getStudents = async (req, res, next) => {
         next(err)
     }
 };
-exports.registerStudent = (req, res, next) => { };
+exports.registerStudent = async (req, res, next) => {
+    const errors = validationResult(req);
+
+    try {
+        if (!errors.isEmpty()) {
+            const error = new Error('Signup failed');
+            error.statusCode = 422;
+            error.data = errors.array();
+            throw error;
+        }
+        const email = req.body.email;
+        const password = req.body.password;
+        const name = req.body.name;
+        const year = req.body.year;
+        const hashedPw = await bcrypt.hashSync(password, 12);
+
+        const student = new Student({
+            studentEmail: email,
+            studentPassword: hashedPw,
+            studentName: name,
+            studentYear: year
+        });
+
+        //add student to database
+        const result = await student.save();
+
+        //to add year of student and max student in that year to program
+        const students = await Student.find({ studentYear: year });
+        const programs = await Program.find();
+        for (let program of programs) {
+            let maxStudent = Math.ceil(students.length * program.percentage);
+            let studentToAdd = {
+                year: year,
+                maxStudents: maxStudent
+            }
+
+            let toAdd = true;
+            if (program.students.length != 0) {
+                for (let student of program.students) {
+                    if (student.year == year) {
+                        student.maxStudents = maxStudent;
+                        toAdd = false;
+                    }
+                }
+                if (toAdd) {
+                    program.students.push(studentToAdd);
+                }
+
+            } else {
+                program.students.push(studentToAdd);
+            }
+            await program.save();
+        };
+        res.status(201).json({ message: 'Student account created!', student: result });
+    } catch (err) {
+        if (!err.statusCode) {
+            err.statusCode = 500
+        }
+        next(err)
+    }
+};
 exports.updateStudent = (req, res, next) => { };
 exports.deleteStudent = (req, res, next) => { };
 

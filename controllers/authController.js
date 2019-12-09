@@ -24,7 +24,8 @@ exports.studentSignup = async (req, res, next) => {
         const student = new Student({
             studentEmail: email,
             studentPassword: hashedPw,
-            studentName: name
+            studentName: name,
+            studentYear: year
         });
 
         const result = await student.save();

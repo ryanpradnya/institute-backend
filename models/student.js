@@ -14,6 +14,10 @@ const studentSchema = new Schema({
         type: String,
         required: true
     },
+    studentYear: {
+        type: String,
+        required: true
+    },
     studentProgram: {
         type: Schema.Types.ObjectId,
         ref: 'Program'
